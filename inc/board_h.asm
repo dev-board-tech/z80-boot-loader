@@ -1,0 +1,51 @@
+IFNDEF BOARD_H
+DEFINE BOARD_H
+
+
+; _bp = bit position
+; _gp = group position
+; _gm = group mask
+; _m = mode
+; _bm = bit mask
+
+; Config IO register
+DEFC IO_CFG_REG = 0xE8
+DEFC IO_CFG_REG_LCD_RESET_bp = 5
+DEFC IO_CFG_REG_LCD_RESET_bm = 1 << IO_CFG_REG_LCD_RESET_bp
+
+DEFC IO_CFG_REG_RS232_MOUSE_bp = 6
+DEFC IO_CFG_REG_RS232_bm = 0 << IO_CFG_REG_RS232_MOUSE_bp
+DEFC IO_CFG_REG_MOUSE_bm = 1 << IO_CFG_REG_RS232_MOUSE_bp
+
+DEFC IO_CFG_REG_CLK2_CTC_bp = 7
+DEFC IO_CFG_REG_CLK2_bm = 0 << IO_CFG_REG_CLK2_CTC_bp
+DEFC IO_CFG_REG_CTC_bm = 1 << IO_CFG_REG_CLK2_CTC_bp
+
+; MMU pages configuration I/O address
+DEFC IO_MMU_BANK_0 = 0xF0
+DEFC IO_MMU_BANK_1 = 0xF1
+DEFC IO_MMU_BANK_2 = 0xF2
+DEFC IO_MMU_BANK_3 = 0xF3
+
+; Config IO register
+DEFC IO_MMU_REG = 0xF8
+DEFC IO_MMU_ENABLE = 0x01
+DEFC IO_MMU_DISABLE = 0x00
+
+; I2C
+DEFC I2CS_SDA_PIN = 1
+DEFC I2CS_SDA_PIN_MASK = 1 << I2CS_SDA_PIN
+DEFC I2CS_SCL_PIN = 2
+DEFC I2CS_SCL_PIN_MASK = 1 << I2CS_SCL_PIN
+
+
+MACRO BOARD_LOAD_IO_ADDR addr
+	ld a, (addr)
+	ld c, a
+ENDM
+
+MACRO BOARD_LOAD_PIO_REGS addr
+	ld ix, addr
+ENDM
+
+ENDIF

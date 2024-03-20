@@ -1,0 +1,6 @@
+IFNDEF BOOT_H
+DEFINE BOOT_H
+
+EXTERN loader_entry
+
+ENDIF
