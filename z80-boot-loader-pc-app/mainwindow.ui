@@ -23,7 +23,7 @@
    </size>
   </property>
   <property name="windowTitle">
-   <string>MainWindow</string>
+   <string>z80-boot-loader-pc-app</string>
   </property>
   <property name="windowIcon">
    <iconset resource="resources.qrc">
@@ -130,6 +130,19 @@
      <number>5</number>
     </property>
    </widget>
+   <widget class="QPushButton" name="pushButton_Clear">
+    <property name="geometry">
+     <rect>
+      <x>460</x>
+      <y>70</y>
+      <width>88</width>
+      <height>26</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Clear</string>
+    </property>
+   </widget>
   </widget>
   <widget class="QMenuBar" name="menubar">
    <property name="geometry">
@@ -137,7 +150,7 @@
      <x>0</x>
      <y>0</y>
      <width>586</width>
-     <height>22</height>
+     <height>23</height>
     </rect>
    </property>
   </widget>

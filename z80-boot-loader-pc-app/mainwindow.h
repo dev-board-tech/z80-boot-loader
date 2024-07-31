@@ -37,6 +37,8 @@ private:
     QByteArray receiveArray;
     QByteArray dataToSend;
     int dataToSendPtr;
+
+    void comPortListRfsh();
 protected:
     bool eventFilter( QObject *o, QEvent *e );
 };

@@ -7,6 +7,16 @@
 #include <QFile>
 #include <QKeyEvent>
 
+void MainWindow::comPortListRfsh() {
+    QString t = ui->comboBox_Port->currentText();
+    ui->comboBox_Port->clear();
+    const auto infos = QSerialPortInfo::availablePorts();
+    for (const QSerialPortInfo &info: infos ) {
+        ui->comboBox_Port->addItem(info.portName());
+    }
+    ui->comboBox_Port->setCurrentText(t);
+}
+
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
     , ui(new Ui::MainWindow) {
@@ -14,16 +24,14 @@ MainWindow::MainWindow(QWidget *parent)
 
     ui->plainTextEdit->installEventFilter(this);
 
-    const auto infos = QSerialPortInfo::availablePorts();
-    for (const QSerialPortInfo &info: infos ) {
-        ui->comboBox_Port->addItem(info.portName());
-    }
+    comPortListRfsh();
 
     serialTimeoutTimer = new QTimer;
     serialTimeoutTimer->setInterval(10);
     sendDataTimer = new QTimer;
     sendDataTimer->setInterval(1);
     serial = new QSerialPort();
+    sendState_e = SEND_STATE_IDLE;
     connect(serialTimeoutTimer, &QTimer::timeout, this, [this]() {
         serialTimeoutTimer->stop();
         QString tmpRcvTxt(receiveArray);
@@ -115,12 +123,16 @@ MainWindow::MainWindow(QWidget *parent)
             return;
         }
         ui->progressBar->setMaximum(f.size());
+        ui->progressBar->setValue(0);
         dataToSend = f.readAll();
         dataToSendPtr = 0;
         sendState_e = SEND_STATE_RESET;
         sendDataTimer->setInterval(1);
         sendDataTimer->start();
         f.close();
+    });
+    connect(ui->pushButton_Clear, &QPushButton::clicked, this, [this]() {
+        ui->plainTextEdit->clear();
     });
 }
 
@@ -131,15 +143,20 @@ MainWindow::~MainWindow() {
 }
 
 bool MainWindow::eventFilter( QObject *o, QEvent *e ) {
-    if ( e->type() == QEvent::KeyPress ) {
+    if ( o == ui->plainTextEdit && e->type() == QEvent::KeyPress ) {
         // special processing for key press
         QKeyEvent *k = (QKeyEvent *)e;
         if(serial->isOpen()) {
             serial->write(QString(k->text().toUtf8().at(0)).toUtf8());
         }
         return true;
+    } else if (o == ui->comboBox_Port) {
+        if(e->type() == QEvent::MouseButtonPress) {
+            comPortListRfsh();
+        }
     } else {
         // standard event processing
         return false;
     }
+    return QMainWindow::eventFilter(o, e);
 }

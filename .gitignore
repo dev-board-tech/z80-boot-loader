@@ -1,2 +1,5 @@
 *.user
-build-*
+/z80-boot-loader/build*
+/z80-boot-loader-pc-app/build-*
+/z80-boot-loader-pc-app/build*
+/z80-boot-loader-pc-app/z80-boot-loader-pc-app.pro.user*
