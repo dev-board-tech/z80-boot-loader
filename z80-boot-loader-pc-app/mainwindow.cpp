@@ -12,7 +12,10 @@ void MainWindow::comPortListRfsh() {
     ui->comboBox_Port->clear();
     const auto infos = QSerialPortInfo::availablePorts();
     for (const QSerialPortInfo &info: infos ) {
-        ui->comboBox_Port->addItem(info.portName());
+        // Filter out virtual tty's
+        if(!info.portName().contains("ttyS")) {
+            ui->comboBox_Port->addItem(info.portName());
+        }
     }
     ui->comboBox_Port->setCurrentText(t);
 }
@@ -32,6 +35,29 @@ MainWindow::MainWindow(QWidget *parent)
     sendDataTimer->setInterval(1);
     serial = new QSerialPort();
     sendState_e = SEND_STATE_IDLE;
+
+    listUsbTimer.setInterval(1000);
+    listUsbTimer.start();
+    serial = new QSerialPort();
+    connect(&listUsbTimer, &QTimer::timeout, this, [this]() {
+        bool equal = true;
+        QList<QSerialPortInfo> infos = QSerialPortInfo::availablePorts();
+        for (int i = 0; i < infos.size(); i++) {
+            if(i < portListLast.size()) {
+                if(infos[i].portName().compare(portListLast[i].portName())) {
+                    equal = false;
+                    break;
+                }
+            } else {
+                equal = false;
+                break;
+            }
+        }
+        if(!equal) {
+            portListLast = infos;
+            comPortListRfsh();
+        }
+    });
     connect(serialTimeoutTimer, &QTimer::timeout, this, [this]() {
         serialTimeoutTimer->stop();
         QString tmpRcvTxt(receiveArray);

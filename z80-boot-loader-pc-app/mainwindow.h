@@ -31,12 +31,16 @@ private:
     Ui::MainWindow *ui;
     QSerialPort *serial;
 
+    QTimer listUsbTimer;
+
     QTimer *serialTimeoutTimer;
     QTimer *sendDataTimer;
 
     QByteArray receiveArray;
     QByteArray dataToSend;
     int dataToSendPtr;
+
+    QList<QSerialPortInfo> portListLast;
 
     void comPortListRfsh();
 protected:
