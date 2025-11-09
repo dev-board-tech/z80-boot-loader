@@ -19,7 +19,7 @@ BIN=loader.bin
 BIN_GENERATED=loader_RST_VECTORS.bin
 BINDIR=build
 FULLBIN=$(BINDIR)/$(BIN)
-INCLUDEDIRS:=../../z80-sdk/src ../../z80-sdk/inc
+INCLUDEDIRS:=../../z80-sdk/src
 MAPFILE=loader.map
 
 
