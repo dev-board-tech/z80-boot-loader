@@ -1,0 +1,13 @@
+10 REM compute the sum of integers with FOR loop (variable F an
+25 LET D = 1
+26 LET F = 10
+27 LET S = 0
+30 FOR N=1 TO F STEP D
+40 LET S = S + N
+50 PRINT N,S,F
+60 LET D = D + 1
+61 LET F = F + 1
+70 NEXT N
+80 PRINT
+90 PRINT "Final sum:", S
+

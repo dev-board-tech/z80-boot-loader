@@ -1,0 +1,13 @@
+5 REM Find greatest common divisor
+10 PRINT "HOME : TEXT"
+20 A = 1071
+21 B = 462
+30 IF A < B THEN C = A : A = B : B = C
+40 PRINT A, B
+50 LET C=A-(A/B)*B
+51 REM C=A MOD B
+60 LET A=B
+61 LET B=C
+70 IF B > 0 GOTO 40
+80 PRINT "GCG is", A
+

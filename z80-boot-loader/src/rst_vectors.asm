@@ -3,17 +3,14 @@ INCLUDE "boot.asm"
 
 SECTION RST_VECTORS
 rst_vector_0:
-	; In theory, on reset the Z80 interrupt are disabled, let's be 100% sure
-	; and disable them again
-	di
 	jp boot
-	nop
-	nop
-	nop
-	nop
+RESET:
+	ld a, (MMU_RAM_ADDR >> 14) + 0
+	out (IO_MMU_BANK_0), a
+	rst 0
 os_syscall:
 rst_vector_8:
-	ld a, MMU_RAM_ADDR >> 14
+	ld a, (MMU_RAM_ADDR >> 14) + 0
 	out (IO_MMU_BANK_0), a
 	rst 0
 	nop

@@ -1,0 +1,5 @@
+*_DATA.bin
+src/
+
+*.dump
+*.map

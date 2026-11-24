@@ -24,27 +24,22 @@ DEFW 0
 
 SECTION LOADER
 
-NEW_LINE_STR:
-DEFB "\r\n\0"
-SET_SCREEN_SIZE_STR:
-DEFB "\e[8;64;128t"
-CLEAR_SCREEN_STR:
-DEFB "\ec"
-CLEAR_BACKLOG_STR:
-DEFB "\e[3J\0"
+;NEW_LINE_STR:
+;DEFB "\r\n\0"
+;SET_SCREEN_SIZE_STR:
+;DEFB "\e[8;64;128t"
+;CLEAR_SCREEN_STR:
+;DEFB "\ec"
+;CLEAR_BACKLOG_STR:
+;DEFB "\e[3J\0"
 START_MSG_STR:
 DEFB "Waiting for upload\r\n\0"
-RECV_HEX_ERR_MSG_STR:
-DEFB "\r\nERROR:Not HEX character\r\n\0"
 
 boot:
 	MMU_INIT()
-	; Boot loader will use the last RAM page as bank 1
 	MMU_SET_ADDR(MMU_RAM_ADDR + MMU_RAM_SIZE - MMU_PAGE_SIZE, IO_MMU_BANK_1)
-	; Application RAM address 0 maped as bank 2
-	MMU_SET_ADDR(MMU_RAM_ADDR, IO_MMU_BANK_2)
-	; Application RAM address 16384 maped as bank 3
-	MMU_SET_ADDR(MMU_RAM_ADDR + MMU_PAGE_SIZE, IO_MMU_BANK_3)
+	MMU_SET_ADDR(MMU_RAM_ADDR + (MMU_PAGE_SIZE * 0), IO_MMU_BANK_2)
+	MMU_SET_ADDR(MMU_RAM_ADDR + (MMU_PAGE_SIZE * 1), IO_MMU_BANK_3)
 	MMU_ENABLE()
 BOOT_CLEAR_KERNEL_BSS:
 	ld hl, __KERNEL_BSS_head
@@ -67,8 +62,6 @@ BOOT_INIT_SIOA:
 	
 BOOT_INIT_SET_SCREEN_SIZE:	
 	BOARD_LOAD_IO_ADDR(SIOA_ADDRESS)
-	;ld hl, SET_SCREEN_SIZE_STR
-	;call sio_PrintStr
 BOOT_INIT_PRINT_START_MSG:	
 	ld hl, START_MSG_STR
 	call sio_PrintStr
@@ -144,8 +137,6 @@ IsFirstHexChar:
 
 errorMessage:
 	BOARD_LOAD_IO_ADDR(SIOA_ADDRESS)
-	;ld hl, RECV_HEX_ERR_MSG_STR
-	;call sio_PrintStr
 	ld a, 'E'
 	call sio_SendC
 	scf
@@ -158,8 +149,7 @@ charRecv_R:
 
 ; Jump to the application
 charRecv_Enter:
-	rst 8
-	ret
+	jp RESET
 
 
 
