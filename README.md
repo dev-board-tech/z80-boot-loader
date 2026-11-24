@@ -10,3 +10,5 @@ The SIO can be replaced by a soft SIO in systems with no hardware serial interfa
 The IO board configuration is in board_h.asm current repo and sio_h.asm in z80-sdk repo.
 
 The PC application is a simple UI developed in Qt Community edition, has a simple built in terminal to avoid switching from boot-loader to terminal and vice-versa.
+
+This boot loader is developed for this board: https://github.com/dev-board-tech/z80-pc-sch
